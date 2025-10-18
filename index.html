@@ -3,22 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GeoNotes | Maps & Personal Notes</title>
+    <title>GeoSphere | Interactive Maps & Notes</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #4361ee;
-            --secondary: #3a0ca3;
-            --accent: #4cc9f0;
-            --light: #f8f9fa;
-            --dark: #212529;
-            --success: #4ade80;
-            --danger: #f43f5e;
-            --gray: #6c757d;
-            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            --radius: 12px;
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #10b981;
+            --accent: #8b5cf6;
+            --light: #f8fafc;
+            --dark: #1e293b;
+            --gray: #64748b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            --radius: 16px;
+            --card-bg: rgba(255, 255, 255, 0.9);
         }
 
         * {
@@ -29,7 +32,7 @@
 
         body {
             font-family: 'Poppins', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: var(--dark);
             min-height: 100vh;
             line-height: 1.6;
@@ -51,7 +54,8 @@
         }
 
         .auth-card {
-            background: white;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
             border-radius: var(--radius);
             box-shadow: var(--shadow);
             padding: 40px;
@@ -78,6 +82,9 @@
             font-size: 2.5rem;
             font-weight: 700;
             margin-bottom: 5px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .logo p {
@@ -113,7 +120,7 @@
         .form-control:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
         }
 
         .btn {
@@ -131,14 +138,13 @@
         }
 
         .btn-primary {
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
         }
 
         .btn-primary:hover {
-            background: var(--secondary);
             transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(67, 97, 238, 0.3);
+            box-shadow: 0 6px 15px rgba(99, 102, 241, 0.4);
         }
 
         .btn-secondary {
@@ -148,7 +154,7 @@
         }
 
         .btn-secondary:hover {
-            background: rgba(67, 97, 238, 0.1);
+            background: rgba(99, 102, 241, 0.1);
         }
 
         .auth-switch {
@@ -181,7 +187,8 @@
         }
 
         header {
-            background: white;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
             box-shadow: var(--shadow);
             position: sticky;
             top: 0;
@@ -202,15 +209,16 @@
         }
 
         .user-avatar {
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--accent));
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-weight: 600;
+            font-size: 1.2rem;
         }
 
         .welcome-message {
@@ -219,7 +227,9 @@
         }
 
         .welcome-message span {
-            color: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .logout-btn {
@@ -236,7 +246,7 @@
         }
 
         .logout-btn:hover {
-            background: #e11d48;
+            background: #dc2626;
             transform: translateY(-2px);
         }
 
@@ -265,19 +275,19 @@
             font-size: 1.5rem;
             font-weight: 600;
             margin-bottom: 15px;
-            color: var(--dark);
+            color: var(--light);
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
         .section-title i {
-            color: var(--primary);
+            color: var(--accent);
         }
 
         .maps-tabs {
             display: flex;
-            background: white;
+            background: var(--card-bg);
             border-radius: var(--radius);
             box-shadow: var(--shadow);
             overflow: hidden;
@@ -293,16 +303,16 @@
         }
 
         .tab.active {
-            background: var(--primary);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
         }
 
         .tab:not(.active):hover {
-            background: rgba(67, 97, 238, 0.1);
+            background: rgba(99, 102, 241, 0.1);
         }
 
         .map-container {
-            background: white;
+            background: var(--card-bg);
             border-radius: var(--radius);
             box-shadow: var(--shadow);
             overflow: hidden;
@@ -323,9 +333,37 @@
             border: none;
         }
 
+        .earth-placeholder {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            padding: 20px;
+            text-align: center;
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+        }
+
+        .earth-placeholder i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: var(--accent);
+        }
+
+        .earth-placeholder h3 {
+            margin-bottom: 10px;
+            font-size: 1.5rem;
+        }
+
+        .earth-placeholder p {
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+
         /* Notes Section */
         .notes-section {
-            background: white;
+            background: var(--card-bg);
             border-radius: var(--radius);
             box-shadow: var(--shadow);
             padding: 25px;
@@ -365,7 +403,7 @@
         .note-textarea:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
         }
 
         .saved-notes {
@@ -457,7 +495,7 @@
         .spinner {
             width: 40px;
             height: 40px;
-            border: 4px solid rgba(67, 97, 238, 0.2);
+            border: 4px solid rgba(99, 102, 241, 0.2);
             border-left: 4px solid var(--primary);
             border-radius: 50%;
             animation: spin 1s linear infinite;
@@ -542,8 +580,8 @@
     <div class="auth-container" id="auth-container">
         <div class="auth-card" id="login-card">
             <div class="logo">
-                <h1>GeoNotes</h1>
-                <p>Your personal maps and notes companion</p>
+                <h1>GeoSphere</h1>
+                <p>Explore the world and capture your thoughts</p>
             </div>
             <form class="auth-form" id="login-form">
                 <div class="form-group">
@@ -565,7 +603,7 @@
 
         <div class="auth-card hidden" id="register-card">
             <div class="logo">
-                <h1>GeoNotes</h1>
+                <h1>GeoSphere</h1>
                 <p>Create your account</p>
             </div>
             <form class="auth-form" id="register-form">
@@ -597,7 +635,7 @@
             <div class="container">
                 <div class="header-content">
                     <div class="logo">
-                        <h1>GeoNotes</h1>
+                        <h1>GeoSphere</h1>
                     </div>
                     <div class="user-info">
                         <div class="user-avatar" id="user-avatar">JD</div>
@@ -616,7 +654,7 @@
             <div class="main-content">
                 <div class="maps-section">
                     <h2 class="section-title">
-                        <i class="fas fa-map"></i> Explore Maps
+                        <i class="fas fa-globe-americas"></i> Explore Maps
                     </h2>
                     
                     <div class="maps-tabs">
@@ -626,21 +664,30 @@
                     </div>
                     
                     <div class="map-container" id="google-map">
-                        <iframe class="map-frame" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3024.183815892936!2d-74.00597268459413!3d40.71274997933085!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25a316e0b3d5f%3A0x7e2e1d3b3e3e3e3e!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2s!4v1620000000000!5m2!1sen!2s" allowfullscreen="" loading="lazy"></iframe>
+                        <iframe class="map-frame" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d193595.15830869428!2d-74.119763973046!3d40.69766374874431!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY!5e0!3m2!1sen!2sus!4v1690000000000!5m2!1sen!2sus" 
+                                allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
                     </div>
                     
                     <div class="map-container hidden" id="bing-map">
-                        <iframe class="map-frame" src="https://www.bing.com/maps/embed?h=400&w=600&cp=40.7128~-74.0060&lvl=11&typ=d&sty=r&src=SHELL&FORM=MBEDV8" scrolling="no"></iframe>
+                        <iframe class="map-frame" src="https://www.bing.com/maps/embed?h=400&w=600&cp=40.7128~-74.006&lvl=11&typ=d&sty=r&src=SHELL&FORM=MBEDV8" 
+                                scrolling="no" frameborder="0"></iframe>
                     </div>
                     
                     <div class="map-container hidden" id="earth-map">
-                        <iframe class="map-frame" src="https://earth.google.com/web/@40.7128,-74.0060,10a,1000d,35y,0h,0t,0r" allowfullscreen></iframe>
+                        <div class="earth-placeholder">
+                            <i class="fas fa-globe"></i>
+                            <h3>Google Earth Experience</h3>
+                            <p>For the full Google Earth experience with 3D views and satellite imagery, we recommend using the official Google Earth application or website.</p>
+                            <a href="https://earth.google.com/web/" target="_blank" class="btn btn-primary">
+                                <i class="fas fa-external-link-alt"></i> Open Google Earth
+                            </a>
+                        </div>
                     </div>
                 </div>
 
                 <div class="notes-section">
                     <div class="notes-header">
-                        <h2 class="section-title">
+                        <h2 class="section-title" style="color: var(--dark);">
                             <i class="fas fa-sticky-note"></i> My Notes
                         </h2>
                         <div class="notes-actions">
@@ -673,11 +720,6 @@
         <i class="fas fa-check-circle"></i>
         <span id="toast-message">Note saved successfully!</span>
     </div>
-
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
     <script>
         // Firebase configuration
@@ -942,6 +984,63 @@
             auth.signOut();
             showToast('Logged out successfully');
         });
+
+        // Demo mode for testing without Firebase
+        document.getElementById('login-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            if (email) {
+                // Demo login without Firebase
+                userName.textContent = email.split('@')[0];
+                userAvatar.textContent = email[0].toUpperCase();
+                
+                authContainer.style.display = 'none';
+                appContainer.classList.add('active');
+                
+                // Load demo notes
+                loadDemoNotes();
+                showToast('Demo mode activated!');
+            }
+        });
+        
+        // Demo notes for testing
+        function loadDemoNotes() {
+            const demoNotes = [
+                {content: "This is a sample note. Try creating your own!", date: new Date().toLocaleString()},
+                {content: "Welcome to GeoSphere! Explore maps and save your thoughts.", date: new Date().toLocaleString()}
+            ];
+            
+            let notesHTML = '';
+            demoNotes.forEach(note => {
+                notesHTML += `
+                    <div class="note-item fade-in">
+                        <div class="note-header">
+                            <div class="note-date">${note.date}</div>
+                            <div class="note-actions">
+                                <button class="note-action" onclick="deleteDemoNote(this)">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="note-content">${note.content}</div>
+                    </div>
+                `;
+            });
+            
+            savedNotes.innerHTML = notesHTML;
+        }
+        
+        window.deleteDemoNote = function(element) {
+            element.closest('.note-item').remove();
+            if (document.querySelectorAll('.note-item').length === 0) {
+                savedNotes.innerHTML = `
+                    <div class="empty-notes">
+                        <i class="fas fa-sticky-note"></i>
+                        <p>No notes yet. Start writing above!</p>
+                    </div>
+                `;
+            }
+        };
     </script>
 </body>
 </html>
