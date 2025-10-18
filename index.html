@@ -1,67 +1,947 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Classtoom History Hub</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      background: linear-gradient(to right, #6a11cb, #2575fc);
-      color: white;
-      margin: 0;
-      padding: 0;
-    }
-    header {
-      text-align: center;
-      padding: 2rem;
-    }
-    #video-list {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 2rem;
-      padding: 2rem;
-    }
-    .video-container {
-      max-width: 400px;
-    }
-    h3 {
-      margin-bottom: 0.5rem;
-    }
-    video {
-      width: 100%;
-      border-radius: 8px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoNotes | Maps & Personal Notes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3a0ca3;
+            --accent: #4cc9f0;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --success: #4ade80;
+            --danger: #f43f5e;
+            --gray: #6c757d;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --radius: 12px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            color: var(--dark);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Auth Section */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .auth-card {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 40px;
+            width: 100%;
+            max-width: 450px;
+            transition: var(--transition);
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .auth-card.hidden {
+            transform: translateY(20px);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .logo p {
+            color: var(--gray);
+            font-size: 1rem;
+        }
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .form-control {
+            padding: 14px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .btn {
+            padding: 14px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(67, 97, 238, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(67, 97, 238, 0.1);
+        }
+
+        .auth-switch {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--gray);
+        }
+
+        .auth-switch a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .auth-switch a:hover {
+            text-decoration: underline;
+        }
+
+        /* App Section */
+        .app-container {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .app-container.active {
+            display: block;
+            opacity: 1;
+        }
+
+        header {
+            background: white;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+
+        .welcome-message {
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        .welcome-message span {
+            color: var(--primary);
+        }
+
+        .logout-btn {
+            background: var(--danger);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .logout-btn:hover {
+            background: #e11d48;
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Maps Section */
+        .maps-section {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            color: var(--primary);
+        }
+
+        .maps-tabs {
+            display: flex;
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+        }
+
+        .tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .tab:not(.active):hover {
+            background: rgba(67, 97, 238, 0.1);
+        }
+
+        .map-container {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            height: 400px;
+            transition: var(--transition);
+            opacity: 1;
+        }
+
+        .map-container.hidden {
+            opacity: 0;
+            height: 0;
+            overflow: hidden;
+        }
+
+        .map-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Notes Section */
+        .notes-section {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            height: fit-content;
+        }
+
+        .notes-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .notes-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .note-input {
+            margin-bottom: 25px;
+        }
+
+        .note-textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            resize: vertical;
+            transition: var(--transition);
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .note-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+
+        .saved-notes {
+            max-height: 400px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+
+        .note-item {
+            background: #f8fafc;
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 0 8px 8px 0;
+            transition: var(--transition);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .note-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .note-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .note-date {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .note-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .note-action {
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .note-action:hover {
+            color: var(--primary);
+        }
+
+        .note-content {
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .empty-notes {
+            text-align: center;
+            padding: 30px;
+            color: var(--gray);
+        }
+
+        .empty-notes i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: #e2e8f0;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(-20px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        .slide-in {
+            animation: slideIn 0.5s ease;
+        }
+
+        /* Loading Spinner */
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(67, 97, 238, 0.2);
+            border-left: 4px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast.success {
+            border-left: 4px solid var(--success);
+        }
+
+        .toast.error {
+            border-left: 4px solid var(--danger);
+        }
+
+        .toast i {
+            font-size: 1.2rem;
+        }
+
+        .toast.success i {
+            color: var(--success);
+        }
+
+        .toast.error i {
+            color: var(--danger);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-content {
+                gap: 20px;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .user-info {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .auth-card {
+                padding: 30px 20px;
+            }
+            
+            .maps-tabs {
+                flex-direction: column;
+            }
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>Classtoom History Hub</h1>
-    <p>Curated academic resources for classroom use</p>
-  </header>
+    <!-- Authentication Section -->
+    <div class="auth-container" id="auth-container">
+        <div class="auth-card" id="login-card">
+            <div class="logo">
+                <h1>GeoNotes</h1>
+                <p>Your personal maps and notes companion</p>
+            </div>
+            <form class="auth-form" id="login-form">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" class="form-control" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" class="form-control" placeholder="Enter your password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-sign-in-alt"></i> Sign In
+                </button>
+            </form>
+            <div class="auth-switch">
+                Don't have an account? <a id="show-register">Sign Up</a>
+            </div>
+        </div>
 
-  <main>
-    <section id="video-list">
-      <div class="video-container">
-        <h3>The Fall of Rome</h3>
-        <video controls>
-          <source src="https://yourfirebaseurl.com/fall-of-rome.mp4" type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
-      </div>
-      <div class="video-container">
-        <h3>Industrial Revolution</h3>
-        <video controls>
-          <source src="https://yourfirebaseurl.com/industrial-revolution.mp4" type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
-      </div>
-    </section>
-  </main>
+        <div class="auth-card hidden" id="register-card">
+            <div class="logo">
+                <h1>GeoNotes</h1>
+                <p>Create your account</p>
+            </div>
+            <form class="auth-form" id="register-form">
+                <div class="form-group">
+                    <label for="register-name">Full Name</label>
+                    <input type="text" id="register-name" class="form-control" placeholder="Enter your full name" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-email">Email</label>
+                    <input type="email" id="register-email" class="form-control" placeholder="Enter your email" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Password</label>
+                    <input type="password" id="register-password" class="form-control" placeholder="Create a password" required>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-user-plus"></i> Create Account
+                </button>
+            </form>
+            <div class="auth-switch">
+                Already have an account? <a id="show-login">Sign In</a>
+            </div>
+        </div>
+    </div>
 
-  <script>
-    // Optional: dynamically load more videos later
-  </script>
+    <!-- App Section -->
+    <div class="app-container" id="app-container">
+        <header>
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <h1>GeoNotes</h1>
+                    </div>
+                    <div class="user-info">
+                        <div class="user-avatar" id="user-avatar">JD</div>
+                        <div class="welcome-message">
+                            Welcome, <span id="user-name">John Doe</span>
+                        </div>
+                        <button class="logout-btn" id="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="container">
+            <div class="main-content">
+                <div class="maps-section">
+                    <h2 class="section-title">
+                        <i class="fas fa-map"></i> Explore Maps
+                    </h2>
+                    
+                    <div class="maps-tabs">
+                        <div class="tab active" data-tab="google">Google Maps</div>
+                        <div class="tab" data-tab="bing">Bing Maps</div>
+                        <div class="tab" data-tab="earth">Google Earth</div>
+                    </div>
+                    
+                    <div class="map-container" id="google-map">
+                        <iframe class="map-frame" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3024.183815892936!2d-74.00597268459413!3d40.71274997933085!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25a316e0b3d5f%3A0x7e2e1d3b3e3e3e3e!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2s!4v1620000000000!5m2!1sen!2s" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                    
+                    <div class="map-container hidden" id="bing-map">
+                        <iframe class="map-frame" src="https://www.bing.com/maps/embed?h=400&w=600&cp=40.7128~-74.0060&lvl=11&typ=d&sty=r&src=SHELL&FORM=MBEDV8" scrolling="no"></iframe>
+                    </div>
+                    
+                    <div class="map-container hidden" id="earth-map">
+                        <iframe class="map-frame" src="https://earth.google.com/web/@40.7128,-74.0060,10a,1000d,35y,0h,0t,0r" allowfullscreen></iframe>
+                    </div>
+                </div>
+
+                <div class="notes-section">
+                    <div class="notes-header">
+                        <h2 class="section-title">
+                            <i class="fas fa-sticky-note"></i> My Notes
+                        </h2>
+                        <div class="notes-actions">
+                            <button class="btn btn-secondary" id="clear-notes">
+                                <i class="fas fa-trash"></i> Clear All
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="note-input">
+                        <textarea class="note-textarea" id="note-textarea" placeholder="Write your note here..."></textarea>
+                        <button class="btn btn-primary" id="save-note-btn">
+                            <i class="fas fa-save"></i> Save Note
+                        </button>
+                    </div>
+                    
+                    <div class="saved-notes" id="saved-notes">
+                        <div class="empty-notes">
+                            <i class="fas fa-sticky-note"></i>
+                            <p>No notes yet. Start writing above!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toast-message">Note saved successfully!</span>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+  apiKey: "AIzaSyCqvMI2R4ifRF56ChTfhGmIPglAJtC8xmU",
+  authDomain: "geonotes-21053.firebaseapp.com",
+  projectId: "geonotes-21053",
+  storageBucket: "geonotes-21053.firebasestorage.app",
+  messagingSenderId: "408033658513",
+  appId: "1:408033658513:web:a1f05e0fc1f6942df72130",
+  measurementId: "G-G08E74VCET"
+};
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // DOM Elements
+        const authContainer = document.getElementById('auth-container');
+        const appContainer = document.getElementById('app-container');
+        const loginCard = document.getElementById('login-card');
+        const registerCard = document.getElementById('register-card');
+        const loginForm = document.getElementById('login-form');
+        const registerForm = document.getElementById('register-form');
+        const showRegister = document.getElementById('show-register');
+        const showLogin = document.getElementById('show-login');
+        const logoutBtn = document.getElementById('logout-btn');
+        const userName = document.getElementById('user-name');
+        const userAvatar = document.getElementById('user-avatar');
+        const noteTextarea = document.getElementById('note-textarea');
+        const saveNoteBtn = document.getElementById('save-note-btn');
+        const savedNotes = document.getElementById('saved-notes');
+        const clearNotesBtn = document.getElementById('clear-notes');
+        const toast = document.getElementById('toast');
+        const toastMessage = document.getElementById('toast-message');
+
+        // Map tabs
+        const tabs = document.querySelectorAll('.tab');
+        const mapContainers = document.querySelectorAll('.map-container');
+
+        // Switch between login and register forms
+        showRegister.addEventListener('click', () => {
+            loginCard.classList.add('hidden');
+            setTimeout(() => {
+                registerCard.classList.remove('hidden');
+            }, 300);
+        });
+
+        showLogin.addEventListener('click', () => {
+            registerCard.classList.add('hidden');
+            setTimeout(() => {
+                loginCard.classList.remove('hidden');
+            }, 300);
+        });
+
+        // Map tab switching
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs
+                tabs.forEach(t => t.classList.remove('active'));
+                // Add active class to clicked tab
+                tab.classList.add('active');
+                
+                // Hide all map containers
+                mapContainers.forEach(container => container.classList.add('hidden'));
+                
+                // Show selected map container
+                const tabId = tab.getAttribute('data-tab');
+                document.getElementById(`${tabId}-map`).classList.remove('hidden');
+            });
+        });
+
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            toastMessage.textContent = message;
+            toast.className = 'toast';
+            toast.classList.add(type);
+            
+            setTimeout(() => {
+                toast.classList.add('show');
+            }, 100);
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Save note to Firestore
+        saveNoteBtn.addEventListener('click', async () => {
+            const content = noteTextarea.value.trim();
+            if (!content) {
+                showToast('Please write something before saving', 'error');
+                return;
+            }
+            
+            const user = auth.currentUser;
+            if (!user) return;
+            
+            try {
+                await db.collection('notes').add({
+                    userId: user.uid,
+                    content: content,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                
+                noteTextarea.value = '';
+                showToast('Note saved successfully!');
+                loadUserNotes();
+            } catch (error) {
+                console.error('Error saving note:', error);
+                showToast('Failed to save note', 'error');
+            }
+        });
+
+        // Clear all notes
+        clearNotesBtn.addEventListener('click', async () => {
+            if (!confirm('Are you sure you want to delete all your notes?')) return;
+            
+            const user = auth.currentUser;
+            if (!user) return;
+            
+            try {
+                const querySnapshot = await db.collection('notes')
+                    .where('userId', '==', user.uid)
+                    .get();
+                
+                const batch = db.batch();
+                querySnapshot.forEach(doc => {
+                    batch.delete(doc.ref);
+                });
+                
+                await batch.commit();
+                showToast('All notes deleted');
+                loadUserNotes();
+            } catch (error) {
+                console.error('Error deleting notes:', error);
+                showToast('Failed to delete notes', 'error');
+            }
+        });
+
+        // Load user notes from Firestore
+        async function loadUserNotes() {
+            const user = auth.currentUser;
+            if (!user) return;
+            
+            try {
+                const querySnapshot = await db.collection('notes')
+                    .where('userId', '==', user.uid)
+                    .orderBy('createdAt', 'desc')
+                    .get();
+                
+                if (querySnapshot.empty) {
+                    savedNotes.innerHTML = `
+                        <div class="empty-notes">
+                            <i class="fas fa-sticky-note"></i>
+                            <p>No notes yet. Start writing above!</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                let notesHTML = '';
+                querySnapshot.forEach(doc => {
+                    const note = doc.data();
+                    const date = note.createdAt ? note.createdAt.toDate().toLocaleString() : 'Just now';
+                    
+                    notesHTML += `
+                        <div class="note-item fade-in">
+                            <div class="note-header">
+                                <div class="note-date">${date}</div>
+                                <div class="note-actions">
+                                    <button class="note-action" onclick="deleteNote('${doc.id}')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="note-content">${note.content}</div>
+                        </div>
+                    `;
+                });
+                
+                savedNotes.innerHTML = notesHTML;
+            } catch (error) {
+                console.error('Error loading notes:', error);
+                savedNotes.innerHTML = '<p>Error loading notes. Please try again.</p>';
+            }
+        }
+
+        // Delete a single note
+        window.deleteNote = async function(noteId) {
+            if (!confirm('Are you sure you want to delete this note?')) return;
+            
+            try {
+                await db.collection('notes').doc(noteId).delete();
+                showToast('Note deleted');
+                loadUserNotes();
+            } catch (error) {
+                console.error('Error deleting note:', error);
+                showToast('Failed to delete note', 'error');
+            }
+        };
+
+        // Authentication state observer
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                // User is signed in
+                userName.textContent = user.displayName || user.email.split('@')[0];
+                userAvatar.textContent = (user.displayName || user.email[0]).toUpperCase();
+                
+                // Switch to app view
+                authContainer.style.display = 'none';
+                appContainer.classList.add('active');
+                
+                // Load user's notes
+                loadUserNotes();
+            } else {
+                // User is signed out
+                appContainer.classList.remove('active');
+                authContainer.style.display = 'flex';
+            }
+        });
+
+        // Login form handler
+        loginForm.addEventListener('submit', async e => {
+            e.preventDefault();
+            
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            try {
+                await auth.signInWithEmailAndPassword(email, password);
+                showToast('Welcome back!');
+            } catch (error) {
+                console.error('Login error:', error);
+                showToast('Login failed. Please check your credentials.', 'error');
+            }
+        });
+
+        // Register form handler
+        registerForm.addEventListener('submit', async e => {
+            e.preventDefault();
+            
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            
+            try {
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                await userCredential.user.updateProfile({
+                    displayName: name
+                });
+                showToast('Account created successfully!');
+            } catch (error) {
+                console.error('Registration error:', error);
+                showToast('Registration failed. Please try again.', 'error');
+            }
+        });
+
+        // Logout handler
+        logoutBtn.addEventListener('click', () => {
+            auth.signOut();
+            showToast('Logged out successfully');
+        });
+    </script>
 </body>
 </html>
